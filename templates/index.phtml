@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Добавление сделок и контактов в amoCRM</title>
+    </head>
+    <body>
+    <h1>Добавление сделок и контактов в amoCRM</h1>
+    <?= $_SESSION['message'] ?? null ?>
+    <?php if (!isset($_SESSION['leads'])) : ?>
+    <h3>Авторизация</h3>
+    <form action="/auth" method="post" >
+        <div>
+            <label>
+                Ваш логин
+                <input type="text" name="user[login]" value="gumarov2017@yandex.ru" required>
+            </label>
+        </div>
+        <div>
+            <label>
+                Subdomain
+                <input type="text" name="user[subdomain]" value="gumarov2017" required>
+            </label>
+        </div>
+        <div>
+            <label>
+                ApiKey
+                <input type="text" name="user[apiKey]" value="f514913d413811c9a0f14d3c131117f7e3778604" required>
+            </label>
+        </div>
+        <input type="submit" value="Показать сделки за этот месяц">
+    </form>
+    <p>Чтобы попробовать приложение, можете не изменять поля авторизации.</p>
+    <?php else : ?>
+    <?php print_r($_SESSION['lead'])?>
+    <hr>
+    <p>Ваш логин: <?= $_SESSION['login'] ?> </p>
+    <hr>
+    <h2>Добавление контакта и сделки и их соединенеие</h2>
+    <p>Если заполнить данные только сделки или только контакта, будет создана только эта сущность.</p>
+    <p>Если заполнить все поля, будет создан контакт и сделка, и после соединены. </p>
+    <form action="/bindLeadContact" method="post">
+        <div>
+            <label>
+                Имя сделки
+                <input type="text" name="lead[name]" value="">
+            </label>
+        </div>
+        <div>
+            <label>
+                Сумма сделки
+                <input type="text" name="lead[sale]" value="">
+            </label>
+        </div>
+        <div>
+            <label>
+                Имя контакта
+                <input type="text" name="contact[name]" value="">
+            </label>
+        </div>
+        <input type="submit" value="Выполнить">
+    </form>
+    <hr>
+    <h2>Активные сделки за этот месяц</h2>
+    <table>
+        <tr>
+            <th>Id сделки</th>
+            <th>Название сделки</th>
+            <th>Бюджет</th>
+        </tr>
+        <?php foreach ($_SESSION['leads'] as $lead) : ?>
+        <tr>
+            <td><?=$lead['id']?></td>
+            <td><?=$lead['name']?></td>
+            <td><?=$lead['sale']?></td>
+        <tr>
+        <?php endforeach; ?>
+    <table>
+    <?php endif; ?>
+    </body>
+</html>
