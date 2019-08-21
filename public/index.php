@@ -32,7 +32,7 @@ $app->addErrorMiddleware(true, true, true);
 $app->get('/', function ($request, $response) {
     if ($_SESSION['subdomain']) {
         $_SESSION['leads'] = getLeadsThisMonth($_SESSION['subdomain'])['_embedded']['items'];
-        $_SESSION['pipe'] = pipe($_SESSION['subdomain']);
+        //$_SESSION['pipe'] = pipe($_SESSION['subdomain']);
     }
     $message = Collection\flattenAll($this->get('flash')->getMessages())[0];
     $_SESSION['message'] = $message;

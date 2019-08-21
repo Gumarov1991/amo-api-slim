@@ -2,6 +2,13 @@
 
 namespace functions;
 
+function pipe($subdomain)
+{
+    $method = '.amocrm.ru/api/v2/pipelines';
+    $link = genLink($subdomain, $method, $param);
+    return execCurl($link, $user);
+}
+
 function auth($login, $apiKey, $subdomain)
 {
     $user = [
@@ -59,6 +66,18 @@ function bindLeadContact($subdomain, $contactId, $leadId)
         [
             'id' => $leadId,
             'contacts_id' => $contactId
+        ]
+    ];
+    return execCurl($link, $leads);
+}
+
+function completeLead($subdomain, $leadId)
+{
+    $link = genLink($subdomain, '.amocrm.ru/api/v2/leads');
+    $leads['update'] = [
+        [
+            'id' => $leadId,
+            'status_id' => "29404594"
         ]
     ];
     return execCurl($link, $leads);
