@@ -12,7 +12,6 @@ use function functions\getLeadsThisMonth;
 use function functions\addLead;
 use function functions\addContact;
 use function functions\bindLeadContact;
-use function functions\pipe;
 use function functions\completeLead;
 
 session_start();
@@ -32,7 +31,6 @@ $app->addErrorMiddleware(true, true, true);
 $app->get('/', function ($request, $response) {
     if ($_SESSION['subdomain']) {
         $_SESSION['leads'] = getLeadsThisMonth($_SESSION['subdomain'])['_embedded']['items'];
-        //$_SESSION['pipe'] = pipe($_SESSION['subdomain']);
     }
     $message = Collection\flattenAll($this->get('flash')->getMessages())[0];
     $_SESSION['message'] = $message;
@@ -87,11 +85,13 @@ $app->post('/bindLeadContact', function ($request, $response) {
 });
 
 $app->post('/completeLead', function ($request, $response) {
-    $subdomain = $_SESSION['subdomain'];
     $lead = $request->getParsedBody()['lead'];
     $leadId = $lead['id'];
-    $_SESSION['leadId'] = $leadId;
-    print_r(completeLead($subdomain, $leadId));
+    $leadPipelineId = $lead['pipelineId'];
+    $subdomain = $_SESSION['subdomain'];
+    completeLead($subdomain, $leadId, $leadPipelineId);
+    $message = "Сделка №{$leadId} перенесена в 'Успешно завершенные'.";
+    $this->get('flash')->addMessage('completeLead', $message);
     return $response->withStatus(302)->withHeader('Location', '/');
 });
 

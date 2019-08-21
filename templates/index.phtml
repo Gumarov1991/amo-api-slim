@@ -33,6 +33,7 @@
     </form>
     <p>Чтобы попробовать приложение, можете не изменять поля авторизации.</p>
     <?php else : ?>
+    <br>
     <hr>
     <p>Ваш логин: <?= $_SESSION['login'] ?> </p>
     <form action="/exit" method="post">
@@ -68,15 +69,23 @@
     <h2>Активные сделки за этот месяц</h2>
     <table>
         <tr>
-            <th>Id сделки</th>
-            <th>Название сделки</th>
-            <th>Бюджет</th>
+            <td><b>Id сделки</b></td>
+            <td><b>Название сделки</b></td>
+            <td><b>Бюджет</b></td>
         </tr>
         <?php foreach ($_SESSION['leads'] as $lead) : ?>
         <tr>
             <td><?=$lead['id']?></td>
             <td><?=$lead['name']?></td>
-            <td><?=$lead['sale']?></td>    
+            <td><?=$lead['sale']?></td>
+            <td>
+                <form action="/completeLead" method="post">
+                <input type="hidden" name="lead[pipelineId]"  value="<?= $lead['pipeline_id'] ?>">
+                <input type="hidden" name="lead[id]"  value="<?= $lead['id'] ?>">
+                <input type="submit" value="Успешно завершить сделку">
+                </form>
+            </td>
+            
         <tr>
         <?php endforeach; ?>
     <table>
