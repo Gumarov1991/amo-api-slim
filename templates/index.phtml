@@ -7,7 +7,7 @@
     <body>
     <h1>Добавление сделок и контактов в amoCRM</h1>
     <?= $_SESSION['message'] ?? null ?>
-    <?php if (!isset($_SESSION['leads'])) : ?>
+    <?php if (empty($_SESSION['login'])) : ?>
     <h3>Авторизация</h3>
     <form action="/auth" method="post" >
         <div>
@@ -71,7 +71,7 @@
         <tr>
             <td><b>Id сделки</b></td>
             <td><b>Название сделки</b></td>
-            <td><b>Бюджет</b></td>
+            <td><b>Бюджет</td>
         </tr>
         <?php foreach ($_SESSION['leads'] as $lead) : ?>
         <tr>

@@ -23,7 +23,7 @@ function auth($login, $apiKey, $subdomain)
 
 function getLeadsThisMonth($subdomain)
 {
-    $link = genLink($subdomain, '.amocrm.ru/api/v2/leads?', 'filter/active');
+    $link = genLink($subdomain, '.amocrm.ru/api/v2/leads?', 'filter%5Bactive%5D=1');
     $date = new \DateTime('first day of this month');
     $firstDayOfThisMonth = $date->setTime(0, 0)->format('D, d M Y H:i:s');
     return execCurl($link, NULL, $firstDayOfThisMonth);
@@ -74,6 +74,7 @@ function completeLead($subdomain, $leadId, $leadPipelineId)
             'updated_at' => $time,
             'status_id' => 142,
             'pipeline_id' => $leadPipelineId
+            
         ]
     ];
     return execCurl($link, $leads);
