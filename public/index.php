@@ -12,6 +12,8 @@ use function functions\getLeadsThisMonth;
 use function functions\addLead;
 use function functions\addContact;
 use function functions\bindLeadContact;
+use function functions\pipe;
+use function functions\completeLead;
 
 session_start();
 
@@ -30,6 +32,7 @@ $app->addErrorMiddleware(true, true, true);
 $app->get('/', function ($request, $response) {
     if ($_SESSION['subdomain']) {
         $_SESSION['leads'] = getLeadsThisMonth($_SESSION['subdomain'])['_embedded']['items'];
+        $_SESSION['pipe'] = pipe($_SESSION['subdomain']);
     }
     $message = Collection\flattenAll($this->get('flash')->getMessages())[0];
     $_SESSION['message'] = $message;
@@ -47,6 +50,12 @@ $app->post('/auth', function ($request, $response) {
         $message = 'Ошибка авторизации';
     }
     $this->get('flash')->addMessage('auth', $message);
+    return $response->withStatus(302)->withHeader('Location', '/');
+});
+
+$app->post('/exit', function ($request, $response) {
+    $_SESSION = [];
+    session_destroy();
     return $response->withStatus(302)->withHeader('Location', '/');
 });
 
@@ -74,6 +83,15 @@ $app->post('/bindLeadContact', function ($request, $response) {
     }
 
     $this->get('flash')->addMessage('bindLeadContact', $message);
+    return $response->withStatus(302)->withHeader('Location', '/');
+});
+
+$app->post('/completeLead', function ($request, $response) {
+    $subdomain = $_SESSION['subdomain'];
+    $lead = $request->getParsedBody()['lead'];
+    $leadId = $lead['id'];
+    $_SESSION['leadId'] = $leadId;
+    print_r(completeLead($subdomain, $leadId));
     return $response->withStatus(302)->withHeader('Location', '/');
 });
 

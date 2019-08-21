@@ -28,13 +28,16 @@
                 <input type="text" name="user[apiKey]" value="f514913d413811c9a0f14d3c131117f7e3778604" required>
             </label>
         </div>
-        <input type="submit" value="Показать сделки за этот месяц">
+        <br>
+        <input type="submit" value="Вход">
     </form>
     <p>Чтобы попробовать приложение, можете не изменять поля авторизации.</p>
     <?php else : ?>
-    <?php print_r($_SESSION['lead'])?>
     <hr>
     <p>Ваш логин: <?= $_SESSION['login'] ?> </p>
+    <form action="/exit" method="post">
+        <input type="submit" value="Выход">
+    </form>
     <hr>
     <h2>Добавление контакта и сделки и их соединенеие</h2>
     <p>Если заполнить данные только сделки или только контакта, будет создана только эта сущность.</p>
@@ -58,6 +61,7 @@
                 <input type="text" name="contact[name]" value="">
             </label>
         </div>
+        <br>
         <input type="submit" value="Выполнить">
     </form>
     <hr>
@@ -72,7 +76,7 @@
         <tr>
             <td><?=$lead['id']?></td>
             <td><?=$lead['name']?></td>
-            <td><?=$lead['sale']?></td>
+            <td><?=$lead['sale']?></td>    
         <tr>
         <?php endforeach; ?>
     <table>
